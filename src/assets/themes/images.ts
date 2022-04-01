@@ -8,4 +8,6 @@ export default {
   logoSm: require('../images/logoSm.png'),
   logoWText: require('../images/logoWText.png'),
   noData: require('../images/noData.png'),
+  tropikaImg: require('../images/tropika-img.png'),
+  tropikaCircleImg: require('../images/tropika-circle-img.png'),
 };

@@ -44,7 +44,7 @@ const UserContextProvider = (props: UserContextProps) => {
         setLoading(false);
         if (autoLoginResponse.data?.success) {
           NavigationServices.replace('Main', {
-            url: 'https://tropika.on-dev.info/#',
+            url: 'https://deals.tropika.club/',
             token: response.data.data.jwt,
           });
         } else {

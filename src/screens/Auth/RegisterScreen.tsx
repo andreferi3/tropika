@@ -43,7 +43,7 @@ const RegisterScreen = () => {
         <View style={styles.contentWrapper}>
           {/* Header */}
           <View style={styles.headerLogo}>
-            <Image source={Images.logoWText} style={styles.logo} />
+            <Image source={Images.tropikaCircleImg} style={styles.logo} />
           </View>
 
           {/* Form */}

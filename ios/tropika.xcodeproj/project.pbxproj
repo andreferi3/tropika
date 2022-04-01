@@ -609,7 +609,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tropika;
 				PRODUCT_NAME = tropika;
-				PROVISIONING_PROFILE_SPECIFIER = Wellaholic;
+				PROVISIONING_PROFILE_SPECIFIER = Tropika;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

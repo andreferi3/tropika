@@ -28,7 +28,7 @@ const App = () => {
   }, []);
 
   const handleDynamicLink = (link: FirebaseDynamicLinksTypes.DynamicLink) => {
-    if (link.url === 'https://tropika.on-dev.info') {
+    if (link.url === 'https://deals.tropika.club/') {
       fetchInitialize(link);
     }
   };

@@ -13,7 +13,7 @@ export function isError(formik: any, fieldName: string) {
 
 export async function buildLink() {
   const link = await dynamicLinks().buildLink({
-    link: 'https://tropika.on-dev.info',
+    link: 'https://deals.tropika.club/',
     domainUriPrefix: 'https://tropika.page.link',
     analytics: {
       campaign: 'change-password',

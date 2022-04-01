@@ -75,7 +75,7 @@ const LoadingScreen = () => {
       if (response.ok) {
         if (response.data?.success) {
           return NavigationServices.replace('Main', {
-            url: 'https://tropika.on-dev.info/#',
+            url: 'https://deals.tropika.club/',
             token: jwt,
           });
         } else {

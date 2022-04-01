@@ -90,7 +90,7 @@ const config = {
 };
 
 const linking = {
-  prefixes: ['https://tropika.on-dev.info/', 'tropika://change-password'],
+  prefixes: ['https://deals.tropika.club/', 'tropika://change-password'],
   config,
 };
 
