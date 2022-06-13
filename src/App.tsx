@@ -28,7 +28,7 @@ const App = () => {
   }, []);
 
   const handleDynamicLink = (link: FirebaseDynamicLinksTypes.DynamicLink) => {
-    if (link.url === 'https://tropika.on-dev.info') {
+    if (link.url === 'https://deals.tropika.club/') {
       fetchInitialize(link);
     }
   };
@@ -44,19 +44,20 @@ const App = () => {
       const url = await Linking.getInitialURL();
       const screenIndex = url?.indexOf('utm_campaign=change-password');
 
+      // console.log('url', dynamicLink?.url);
+
       if (screenIndex) {
         if (screenIndex > -1) {
           const txt = 'utm_source=';
           const sourceIndex = url?.lastIndexOf('utm_source=') as number;
-          const sourceRes = url?.substr(sourceIndex);
-          const cidIndex = sourceRes?.indexOf('&cid') as number;
+          // const sourceRes = url?.substring(sourceIndex);
+          // const cidIndex = sourceRes?.indexOf('&cid') as number;
 
-          const utmSource = url?.substr(
-            sourceIndex + txt.length,
-            cidIndex - txt.length,
-          );
+          const utmSource = url?.substring(sourceIndex + txt.length);
 
           source = utmSource?.split('%26');
+
+          // console.log('email ios ', source);
 
           return NavigationServices.replace('ChangePassword', {
             email: source[0],

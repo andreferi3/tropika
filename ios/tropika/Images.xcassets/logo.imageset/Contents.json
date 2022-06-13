@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "logoSideText.png",
+      "filename" : "logo-tropika.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "logoSideText@2x.png",
+      "filename" : "logo-tropika@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "logoSideText@3x.png",
+      "filename" : "logo-tropika@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

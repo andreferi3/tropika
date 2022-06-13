@@ -8,6 +8,7 @@ import {
   RefreshControl,
   ActivityIndicator,
   SafeAreaView,
+  TouchableOpacity,
 } from 'react-native';
 import {RouteProp, useRoute} from '@react-navigation/core';
 
@@ -19,6 +20,7 @@ import CText from '../components/CText';
 import {RootStackRoutesProps} from '../routes';
 import RNRestart from 'react-native-restart';
 import NetInfo from '@react-native-community/netinfo';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 // * Styles & Assets
 import GlobalStyles from '../public/styles/GlobalStyles';
@@ -27,6 +29,8 @@ import {Colors, Images} from '../assets/themes';
 import AsyncStorage from '@react-native-community/async-storage';
 import {iOS} from '../public/helper/GlobalHelper';
 import NavigationServices from '../routes/NavigationServices';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import {getStatusBarHeight} from '../public/helper/GetStatusBarHeight';
 
 const INJECTED_JS = `
   const meta = document.createElement('meta');
@@ -56,6 +60,8 @@ const HomeScreen = () => {
   const [scrollViewHeight, setScrollViewHeight] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
+  const [logoutShow, setLogoutShow] = useState(false);
+
   const {url, token} = route.params;
 
   useEffect(() => {
@@ -67,12 +73,16 @@ const HomeScreen = () => {
       setIsConnected(state.isConnected);
     });
 
-    if (webUrl.indexOf('customer-logout') > -1) {
-      setTimeout(async () => {
-        await AsyncStorage.clear();
-      });
+    setLogoutShow(false);
 
-      return NavigationServices.replace('Auth');
+    if (webUrl.indexOf('my-account') > -1) {
+      setTimeout(() => {
+        setLogoutShow(true);
+      }, 1000);
+    }
+
+    if (webUrl.indexOf('customer-logout') > -1) {
+      logout();
     }
 
     return () => {
@@ -99,12 +109,22 @@ const HomeScreen = () => {
   const onWebViewMessage = (e: any) => {
     const {data} = e.nativeEvent;
 
+    console.log(JSON.parse(data));
+
     try {
       const {scrollTop} = JSON.parse(data);
       setIsPullToRefreshEnabled(scrollTop === 0);
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const logout = () => {
+    setTimeout(async () => {
+      await AsyncStorage.clear();
+    });
+
+    return NavigationServices.replace('Auth');
   };
 
   if (!isConnected) {
@@ -177,10 +197,12 @@ const HomeScreen = () => {
 
             if (!e.nativeEvent.loading) {
               if (e.nativeEvent.url !== url) {
-                return NavigationServices.replace('Main2', {
-                  url: e.nativeEvent.url,
-                  token,
-                });
+                if (!iOS) {
+                  return NavigationServices.navigate('Main2', {
+                    url: e.nativeEvent.url,
+                    token,
+                  });
+                }
               }
             }
           }}
@@ -188,7 +210,20 @@ const HomeScreen = () => {
           style={{height: scrollViewHeight, webHeight: '100%'}}
         />
       </KeyboardAwareScrollView>
-      {isLoading && !iOS && (
+      {logoutShow && (
+        <TouchableOpacity
+          style={styles.btnLogout}
+          onPress={logout}
+          activeOpacity={1}>
+          <View style={styles.btnRoundRed}>
+            <AntDesign name="logout" style={styles.iconLogout} />
+            <CText semi color="black" size={EStyleSheet.value('10rem')}>
+              Logout
+            </CText>
+          </View>
+        </TouchableOpacity>
+      )}
+      {isLoading && (
         <View style={styles.loader}>
           <ActivityIndicator size="large" color="red" style={styles.loading} />
         </View>
@@ -231,6 +266,34 @@ const styles = createStyles({
     width: '280rem',
     height: '280rem',
     resizeMode: 'contain',
+  },
+  btnLogout: {
+    position: 'absolute',
+    top: getStatusBarHeight(true),
+    right: 0,
+    alignItems: 'flex-end',
+  },
+  iconLogout: {
+    fontSize: '19.5rem',
+    color: '#7D7D7D',
+  },
+  btnRoundRed: {
+    width: '60rem',
+    backgroundColor: 'white',
+    padding: '5rem',
+    borderTopLeftRadius: '50rem',
+    borderBottomLeftRadius: '50rem',
+    justifyContent: 'center',
+    alignItems: 'center',
+    // alignItems: 'center',
+    // shadowColor: '#000',
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
+    // shadowOpacity: 0.25,
+    // shadowRadius: 3.84,
+    // elevation: 5,
   },
 });
 

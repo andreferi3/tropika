@@ -1,7 +1,7 @@
 import {Dimensions, Platform} from 'react-native';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 
-export const {width} = Dimensions.get('screen');
+export const {width, height} = Dimensions.get('screen');
 export const iOS = Platform.OS === 'ios';
 
 export function isError(formik: any, fieldName: string) {
@@ -13,7 +13,7 @@ export function isError(formik: any, fieldName: string) {
 
 export async function buildLink() {
   const link = await dynamicLinks().buildLink({
-    link: 'https://tropika.on-dev.info',
+    link: 'https://deals.tropika.club/',
     domainUriPrefix: 'https://tropika.page.link',
     analytics: {
       campaign: 'change-password',

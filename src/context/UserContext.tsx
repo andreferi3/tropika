@@ -42,10 +42,17 @@ const UserContextProvider = (props: UserContextProps) => {
 
       if (autoLoginResponse.ok) {
         setLoading(false);
-        NavigationServices.replace('Main', {
-          url: 'https://tropika.on-dev.info/#',
-          token: response.data.data.jwt,
-        });
+        if (autoLoginResponse.data?.success) {
+          NavigationServices.replace('Main', {
+            url: 'https://deals.tropika.club/',
+            token: response.data.data.jwt,
+          });
+        } else {
+          showMessage({
+            message: "User can't login due to server error",
+            type: 'danger',
+          });
+        }
       } else {
         setLoading(false);
       }

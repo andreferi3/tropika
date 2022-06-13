@@ -20,8 +20,8 @@ const styles = createStyles({
     marginBottom: '40rem',
   },
   logo: {
-    width: '190rem',
-    height: '110rem',
+    width: '140rem',
+    height: '140rem',
     resizeMode: 'contain',
   },
   backgroundBottomWrapper: {

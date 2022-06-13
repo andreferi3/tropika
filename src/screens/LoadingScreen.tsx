@@ -9,6 +9,7 @@ import GlobalStyles from '../public/styles/GlobalStyles';
 import NavigationServices from '../routes/NavigationServices';
 import {userServices} from '../public/services';
 import {iOS} from '../public/helper/GlobalHelper';
+import {showMessage} from 'react-native-flash-message';
 
 const LoadingScreen = () => {
   useEffect(() => {
@@ -26,19 +27,24 @@ const LoadingScreen = () => {
       const url = await Linking.getInitialURL();
       const screenIndex = url?.indexOf('utm_campaign=change-password');
 
+      // console.log('url', url);
+
       if (screenIndex) {
         if (screenIndex > -1) {
           const txt = 'utm_source=';
           const sourceIndex = url?.lastIndexOf('utm_source=') as number;
-          const sourceRes = url?.substr(sourceIndex);
-          const cidIndex = sourceRes?.indexOf('&cid') as number;
+          // const sourceRes = url?.substring(sourceIndex);
+          // const cidIndex = sourceRes?.indexOf('&cid') as number;
 
-          const utmSource = url?.substr(
-            sourceIndex + txt.length,
-            cidIndex - txt.length,
-          );
+          // console.log('hasil : ', url?.substring(sourceIndex + txt.length));
+
+          const utmSource = url?.substring(sourceIndex + txt.length);
+
+          // console.log('sourceRes', utmSource);
 
           source = utmSource?.split('%26');
+
+          // console.log('email ios ', source);
 
           return NavigationServices.replace('ChangePassword', {
             email: source[0],
@@ -52,6 +58,8 @@ const LoadingScreen = () => {
           if (dynamicLink.utmParameters?.utm_source) {
             console.log(dynamicLink.utmParameters?.utm_source);
             source = dynamicLink.utmParameters.utm_source.split('&');
+            console.log('email : ', source);
+
             return NavigationServices.replace('ChangePassword', {
               email: source[0],
               code: source[1],
@@ -65,10 +73,21 @@ const LoadingScreen = () => {
       const response = await userServices.autoLogin({jwt});
 
       if (response.ok) {
-        return NavigationServices.replace('Main', {
-          url: 'https://tropika.on-dev.info/#',
-          token: jwt,
-        });
+        if (response.data?.success) {
+          return NavigationServices.replace('Main', {
+            url: 'https://deals.tropika.club/',
+            token: jwt,
+          });
+        } else {
+          showMessage({
+            message: "Logged out, due to can't authenticate user",
+            type: 'danger',
+          });
+
+          await AsyncStorage.clear();
+
+          return NavigationServices.replace('Auth');
+        }
       }
     } else {
       return NavigationServices.replace('Auth');

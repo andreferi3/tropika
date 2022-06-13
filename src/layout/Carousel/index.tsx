@@ -55,7 +55,7 @@ const CarouselComponent: FC<IProps> = ({onStartPress}) => {
   return (
     <View style={styles.carouselContainer}>
       <View style={styles.headerLogo}>
-        <Image source={Images.logoSideText} style={styles.logoImg} />
+        <Image source={Images.tropikaImg} style={styles.logoImg} />
       </View>
       <ScrollView
         horizontal

@@ -66,9 +66,7 @@ export const register = (payload: RegisterPayload) => {
  */
 export const autoLogin = (payload: AutoLoginPayload) => {
   return axios
-    .get(
-      `?rest_route=/simple-jwt-login/v1/autologin&JWT=${payload.jwt}&AUTH_KEY=THISISMySpeCiaLAUthCode`,
-    )
+    .get(`?rest_route=/simple-jwt-login/v1/autologin&JWT=${payload.jwt}`)
     .then(res => {
       return okResponse(res);
     })

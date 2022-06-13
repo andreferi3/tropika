@@ -261,7 +261,6 @@
 
 import {RouteProp, useRoute} from '@react-navigation/core';
 import React from 'react';
-import {View, Text} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import WebView from 'react-native-webview';
 import GlobalStyles from '../public/styles/GlobalStyles';
@@ -270,7 +269,7 @@ import NavigationServices from '../routes/NavigationServices';
 
 interface Props {}
 
-const HomeScreen2 = (props: Props) => {
+const HomeScreen2 = () => {
   const route = useRoute<RouteProp<RootStackRoutesProps, 'Main2'>>();
 
   const {url, token} = route.params;
@@ -292,14 +291,14 @@ const HomeScreen2 = (props: Props) => {
         onLoadStart={e => {
           if (!e.nativeEvent.loading) {
             if (e.nativeEvent.url !== url) {
-              return NavigationServices.replace('Main', {
+              return NavigationServices.navigate('Main', {
                 url: e.nativeEvent.url,
                 token,
               });
             }
           }
         }}
-        style={{height: '100%'}}
+        style={GlobalStyles.h100}
       />
     </SafeAreaView>
   );

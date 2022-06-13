@@ -22,11 +22,14 @@ export const FormForgotPasswordSchema = object().shape({
 });
 
 export const FormChangePasswordSchema = object().shape({
-  password: string().required('Password tidak boleh kosong'),
+  password: string().required('Password is required'),
   confirmPassword: string()
     .when('password', {
       is: (val: string) => (val && val.length > 0 ? true : false),
-      then: string().oneOf([ref('password')], 'Konfirmasi Password tidak sama'),
+      then: string().oneOf(
+        [ref('password')],
+        "Confirmation password is doesn't match",
+      ),
     })
-    .required('Konfirmasi Password tidak boleh kosong'),
+    .required('Confirmation password is required'),
 });
