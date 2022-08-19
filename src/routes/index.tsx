@@ -23,10 +23,12 @@ export type RootStackRoutesProps = {
   Main: {
     url: string;
     token: string;
+    source: string;
   };
   Main2: {
     url: string;
     token: string;
+    source: string;
   };
   Auth: undefined;
 };

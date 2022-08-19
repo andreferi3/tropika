@@ -5,7 +5,6 @@ export const {width, height} = Dimensions.get('screen');
 export const iOS = Platform.OS === 'ios';
 
 export function isError(formik: any, fieldName: string) {
-  console.log('touched : ', formik.touched[fieldName]);
   if (formik.touched[fieldName] && formik.errors[fieldName]) {
     return formik.errors[fieldName];
   }
@@ -27,5 +26,21 @@ export async function buildLink() {
     },
   });
 
+  console.log(link);
+
   return link;
+}
+
+export function getParameterByName(name: string, url: string) {
+  name = name.replace(/[\\[\]]/g, '\\$&');
+  var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+    results = regex.exec(url);
+  if (!results) {
+    return null;
+  }
+
+  if (!results[2]) {
+    return '';
+  }
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }

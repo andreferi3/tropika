@@ -18,7 +18,7 @@
 		6E1C693122DB4973A14AACE8 /* IBMPlexSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F7A373B956D740CFA8EB2EB0 /* IBMPlexSans-Regular.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		DF5502DB35954995A357C080 /* IBMPlexSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9F88D5A954E04419B55B31A9 /* IBMPlexSans-Medium.ttf */; };
-		EE9C29622786A96000E918B9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EE9C29612786A96000E918B9 /* GoogleService-Info.plist */; };
+		EE2D5F1428993EE00097024B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EE2D5F1328993EDF0097024B /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,7 +66,7 @@
 		C8D6350E1AE94B78A531745C /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		DD3A51D0F586499A911C4CB6 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		EE9C29612786A96000E918B9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Documents/Project RN Documentation/Tropika/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		EE2D5F1328993EDF0097024B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EECCC3F9272AF0FC006D5907 /* tropika.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = tropika.entitlements; path = tropika/tropika.entitlements; sourceTree = "<group>"; };
 		F38E68C238FF458AB4BBA013 /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
 		F7A373B956D740CFA8EB2EB0 /* IBMPlexSans-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "IBMPlexSans-Regular.ttf"; path = "../src/assets/fonts/IBMPlexSans-Regular.ttf"; sourceTree = "<group>"; };
@@ -113,9 +113,9 @@
 		13B07FAE1A68108700A75B9A /* tropika */ = {
 			isa = PBXGroup;
 			children = (
+				EE2D5F1328993EDF0097024B /* GoogleService-Info.plist */,
 				EECCC3F9272AF0FC006D5907 /* tropika.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
-				EE9C29612786A96000E918B9 /* GoogleService-Info.plist */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
@@ -306,7 +306,7 @@
 				DF5502DB35954995A357C080 /* IBMPlexSans-Medium.ttf in Resources */,
 				6E1C693122DB4973A14AACE8 /* IBMPlexSans-Regular.ttf in Resources */,
 				61BFF099166247AC9378E4D0 /* IBMPlexSans-SemiBold.ttf in Resources */,
-				EE9C29622786A96000E918B9 /* GoogleService-Info.plist in Resources */,
+				EE2D5F1428993EE00097024B /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -609,7 +609,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tropika;
 				PRODUCT_NAME = tropika;
-				PROVISIONING_PROFILE_SPECIFIER = Tropika;
+				PROVISIONING_PROFILE_SPECIFIER = Wellaholic;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {
   View,
   Image,
@@ -31,6 +32,7 @@ import {iOS} from '../public/helper/GlobalHelper';
 import NavigationServices from '../routes/NavigationServices';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {getStatusBarHeight} from '../public/helper/GetStatusBarHeight';
+import {UserContext} from '../context/UserContext';
 
 const INJECTED_JS = `
   const meta = document.createElement('meta');
@@ -50,6 +52,7 @@ const INJECTED_JS = `
 let backPressed = 0;
 
 const HomeScreen = () => {
+  const {userAutoLogin} = useContext(UserContext);
   const route = useRoute<RouteProp<RootStackRoutesProps, 'Main'>>();
   let _webViewRef: any = useRef();
 
@@ -62,7 +65,7 @@ const HomeScreen = () => {
 
   const [logoutShow, setLogoutShow] = useState(false);
 
-  const {url, token} = route.params;
+  const {url, token, source} = route.params;
 
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', () => handleBackButton());
@@ -83,6 +86,10 @@ const HomeScreen = () => {
 
     if (webUrl.indexOf('customer-logout') > -1) {
       logout();
+    }
+
+    if (webUrl.indexOf('?rest_route=/simple-jwt-login/v1/autologin') > -1) {
+      userAutoLogin(webUrl);
     }
 
     return () => {
@@ -175,40 +182,77 @@ const HomeScreen = () => {
             style={GlobalStyles.bgTransparent}
           />
         }>
-        <WebView
-          sharedCookiesEnabled
-          thirdPartyCookiesEnabled
-          domStorageEnabled
-          cacheEnabled
-          javaScriptEnabled
-          ref={_webViewRef}
-          onMessage={onWebViewMessage}
-          injectedJavaScript={INJECTED_JS}
-          source={{
-            uri: url,
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }}
-          onLoadStart={e => {
-            console.log(e.nativeEvent.url);
-            setWebUrl(e.nativeEvent.url);
-            setIsLoading(true);
+        {url ? (
+          <WebView
+            sharedCookiesEnabled
+            thirdPartyCookiesEnabled
+            domStorageEnabled
+            cacheEnabled
+            javaScriptEnabled
+            ref={_webViewRef}
+            onMessage={onWebViewMessage}
+            injectedJavaScript={INJECTED_JS}
+            source={{
+              uri: url,
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }}
+            onLoadStart={e => {
+              console.log('url event :', e.nativeEvent.url);
+              setWebUrl(e.nativeEvent.url);
+              setIsLoading(true);
 
-            if (!e.nativeEvent.loading) {
-              if (e.nativeEvent.url !== url) {
-                if (!iOS) {
-                  return NavigationServices.navigate('Main2', {
-                    url: e.nativeEvent.url,
-                    token,
-                  });
+              if (!e.nativeEvent.loading) {
+                if (e.nativeEvent.url !== url) {
+                  if (!iOS) {
+                    return NavigationServices.navigate('Main2', {
+                      url: e.nativeEvent.url,
+                      token,
+                    });
+                  }
                 }
               }
-            }
-          }}
-          onLoad={() => setIsLoading(false)}
-          style={{height: scrollViewHeight, webHeight: '100%'}}
-        />
+            }}
+            onLoad={() => setIsLoading(false)}
+            style={{height: scrollViewHeight, webHeight: '100%'}}
+          />
+        ) : (
+          <WebView
+            sharedCookiesEnabled
+            thirdPartyCookiesEnabled
+            domStorageEnabled
+            cacheEnabled
+            javaScriptEnabled
+            ref={_webViewRef}
+            onMessage={onWebViewMessage}
+            injectedJavaScript={INJECTED_JS}
+            source={{
+              html: source,
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }}
+            onLoadStart={e => {
+              console.log(e.nativeEvent.url);
+              setWebUrl(e.nativeEvent.url);
+              setIsLoading(true);
+
+              if (!e.nativeEvent.loading) {
+                if (e.nativeEvent.url !== url) {
+                  if (!iOS) {
+                    return NavigationServices.navigate('Main2', {
+                      url: e.nativeEvent.url,
+                      token,
+                    });
+                  }
+                }
+              }
+            }}
+            onLoad={() => setIsLoading(false)}
+            style={{height: scrollViewHeight, webHeight: '100%'}}
+          />
+        )}
       </KeyboardAwareScrollView>
       {logoutShow && (
         <TouchableOpacity

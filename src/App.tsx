@@ -13,8 +13,9 @@ import UserContextProvider from './context/UserContext';
 import dynamicLinks, {
   FirebaseDynamicLinksTypes,
 } from '@react-native-firebase/dynamic-links';
-import {iOS} from './public/helper/GlobalHelper';
+import {getParameterByName, iOS} from './public/helper/GlobalHelper';
 import NavigationServices from './routes/NavigationServices';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const App = () => {
   useEffect(() => {
@@ -28,7 +29,9 @@ const App = () => {
   }, []);
 
   const handleDynamicLink = (link: FirebaseDynamicLinksTypes.DynamicLink) => {
-    if (link.url === 'https://deals.tropika.club/') {
+    console.log(link);
+
+    if (link.url === 'https://deals.tropika.club') {
       fetchInitialize(link);
     }
   };
@@ -38,13 +41,21 @@ const App = () => {
   ) => {
     let source: any;
 
+    const jwt = await AsyncStorage.getItem('BEARER_TOKEN');
+
+    if (jwt !== null) {
+      return;
+    }
+
     let dynamicLink: FirebaseDynamicLinksTypes.DynamicLink = link;
+
+    console.log('masuk sini gak cok');
 
     if (iOS && !dynamicLink?.url) {
       const url = await Linking.getInitialURL();
       const screenIndex = url?.indexOf('utm_campaign=change-password');
 
-      // console.log('url', dynamicLink?.url);
+      console.log('url', dynamicLink?.url, url, screenIndex);
 
       if (screenIndex) {
         if (screenIndex > -1) {
@@ -67,16 +78,13 @@ const App = () => {
       }
     } else {
       if (dynamicLink?.url) {
-        if (dynamicLink.utmParameters?.utm_campaign === 'change-password') {
-          if (dynamicLink.utmParameters?.utm_source) {
-            console.log(dynamicLink.utmParameters?.utm_source);
-            source = dynamicLink.utmParameters.utm_source.split('&');
-            return NavigationServices.replace('ChangePassword', {
-              email: source[0],
-              code: source[1],
-            });
-          }
-        }
+        const email = getParameterByName('email', dynamicLink.url);
+        const code = getParameterByName('code', dynamicLink.url);
+
+        return NavigationServices.replace('ChangePassword', {
+          email,
+          code,
+        });
       }
     }
   };

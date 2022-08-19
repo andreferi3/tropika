@@ -8,8 +8,9 @@ import dynamicLinks from '@react-native-firebase/dynamic-links';
 import GlobalStyles from '../public/styles/GlobalStyles';
 import NavigationServices from '../routes/NavigationServices';
 import {userServices} from '../public/services';
-import {iOS} from '../public/helper/GlobalHelper';
+// import {iOS} from '../public/helper/GlobalHelper';
 import {showMessage} from 'react-native-flash-message';
+import {getParameterByName} from '../public/helper/GlobalHelper';
 
 const LoadingScreen = () => {
   useEffect(() => {
@@ -22,12 +23,14 @@ const LoadingScreen = () => {
     const jwt = await AsyncStorage.getItem('BEARER_TOKEN');
 
     const dynamicLink = await dynamicLinks().getInitialLink();
+    const url = await Linking.getInitialURL();
 
-    if (iOS && !dynamicLink?.url) {
-      const url = await Linking.getInitialURL();
+    console.log('url loading', url, typeof url);
+
+    if (url) {
       const screenIndex = url?.indexOf('utm_campaign=change-password');
 
-      // console.log('url', url);
+      console.log('url', url);
 
       if (screenIndex) {
         if (screenIndex > -1) {
@@ -36,15 +39,11 @@ const LoadingScreen = () => {
           // const sourceRes = url?.substring(sourceIndex);
           // const cidIndex = sourceRes?.indexOf('&cid') as number;
 
-          // console.log('hasil : ', url?.substring(sourceIndex + txt.length));
-
           const utmSource = url?.substring(sourceIndex + txt.length);
 
-          // console.log('sourceRes', utmSource);
+          source = utmSource?.split('&');
 
-          source = utmSource?.split('%26');
-
-          // console.log('email ios ', source);
+          console.log('email ios ', source);
 
           return NavigationServices.replace('ChangePassword', {
             email: source[0],
@@ -54,18 +53,13 @@ const LoadingScreen = () => {
       }
     } else {
       if (dynamicLink?.url) {
-        if (dynamicLink.utmParameters?.utm_campaign === 'change-password') {
-          if (dynamicLink.utmParameters?.utm_source) {
-            console.log(dynamicLink.utmParameters?.utm_source);
-            source = dynamicLink.utmParameters.utm_source.split('&');
-            console.log('email : ', source);
+        const email = getParameterByName('email', dynamicLink.url);
+        const code = getParameterByName('code', dynamicLink.url);
 
-            return NavigationServices.replace('ChangePassword', {
-              email: source[0],
-              code: source[1],
-            });
-          }
-        }
+        return NavigationServices.replace('ChangePassword', {
+          email,
+          code,
+        });
       }
     }
 
@@ -73,9 +67,16 @@ const LoadingScreen = () => {
       const response = await userServices.autoLogin({jwt});
 
       if (response.ok) {
-        if (response.data?.success) {
+        if (response.data) {
+          if (response.data?.success) {
+            return NavigationServices.replace('Main', {
+              url: 'https://deals.tropika.club/',
+              token: jwt,
+            });
+          }
+
           return NavigationServices.replace('Main', {
-            url: 'https://deals.tropika.club/',
+            source: response.data,
             token: jwt,
           });
         } else {

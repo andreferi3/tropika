@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
+import axios from 'axios';
 import React, {createContext, ReactNode, useState} from 'react';
 import {showMessage} from 'react-native-flash-message';
 import {userServices} from '../public/services';
@@ -19,6 +20,7 @@ interface UserContextValue {
   loading: boolean;
   userLogin: (payload: LoginPayload) => {} | void;
   userRegister: (payload: RegisterPayload) => {} | void;
+  userAutoLogin: (url: string) => {} | void;
   forgetPassword: (payload: ForgetPasswordPayload) => {} | void;
   changePassword: (payload: ChangePasswordPayload) => {} | void;
 }
@@ -42,9 +44,10 @@ const UserContextProvider = (props: UserContextProps) => {
 
       if (autoLoginResponse.ok) {
         setLoading(false);
-        if (autoLoginResponse.data?.success) {
+        console.log(typeof autoLoginResponse.data);
+        if (autoLoginResponse.data) {
           NavigationServices.replace('Main', {
-            url: 'https://deals.tropika.club/',
+            source: autoLoginResponse.data,
             token: response.data.data.jwt,
           });
         } else {
@@ -58,7 +61,7 @@ const UserContextProvider = (props: UserContextProps) => {
       }
     } else {
       setLoading(false);
-      if (response.data.response.data.data.message) {
+      if (response.data?.response?.data?.data?.message) {
         showMessage({
           message: response.data.response.data.data.message,
           type: 'danger',
@@ -70,6 +73,42 @@ const UserContextProvider = (props: UserContextProps) => {
         });
       }
     }
+  };
+
+  const userAutoLogin = async (url: string) => {
+    var regex = /[?&]([^=#]+)=([^&#]*)/g;
+    let params: any = {};
+    let match;
+
+    while ((match = regex.exec(url))) {
+      params[match[1]] = match[2];
+    }
+
+    console.log('masuk kesini guys', url, params.JWT);
+
+    return axios
+      .get(url)
+      .then(response => {
+        console.log('masuk ke response', response.status);
+
+        return NavigationServices.replace('Main', {
+          source: response.data,
+          token: params.JWT,
+        });
+      })
+      .catch(err => {
+        if (err.response?.data?.data?.message) {
+          showMessage({
+            message: err.response.data.data.message,
+            type: 'danger',
+          });
+        } else {
+          showMessage({
+            message: `Unidentified Error : ${err?.response?.status}`,
+            type: 'danger',
+          });
+        }
+      });
   };
 
   const userRegister = async (payload: RegisterPayload) => {
@@ -161,6 +200,7 @@ const UserContextProvider = (props: UserContextProps) => {
         user,
         loading,
         userLogin,
+        userAutoLogin,
         userRegister,
         forgetPassword,
         changePassword,

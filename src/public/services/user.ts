@@ -65,8 +65,21 @@ export const register = (payload: RegisterPayload) => {
  * @returns
  */
 export const autoLogin = (payload: AutoLoginPayload) => {
+  let axiosCall = axios.CancelToken.source();
+
+  setTimeout(() => {
+    axiosCall.cancel('Timeout of 15 second exceed');
+  }, 15000);
+
+  console.log(payload.jwt);
+
   return axios
-    .get(`?rest_route=/simple-jwt-login/v1/autologin&JWT=${payload.jwt}`)
+    .get(
+      `?rest_route=/simple-jwt-login/v1/autologin&JWT=${payload.jwt}&AUTH_KEY=THISISMySpeCiaLAUthCode`,
+      {
+        cancelToken: axiosCall.token,
+      },
+    )
     .then(res => {
       return okResponse(res);
     })
